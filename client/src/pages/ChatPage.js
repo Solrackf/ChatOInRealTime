@@ -16,7 +16,7 @@ function ChatPage() {
           className='w-full h-full object-contain rounded-xl'
         ></iframe>
       </div>
-      <div className="chatContainer min-w-[30vw] max-w-[30vw] h-[90vh] px-4 py-4">
+      <div className="chatContainer min-w-[30vw] max-w-[30vw] h-[90vh] p-4">
         <Chat />
       </div>
     </div>
