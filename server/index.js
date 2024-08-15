@@ -1,31 +1,49 @@
+require('dotenv').config()
+
 const express = require('express');
 const http = require('http');
-const mongoose = require('mongoose');
-const socketio = require('socket.io');
-const authRoutes = require('./routes/auth');
-const Message = require('./models/Message');
-const authMiddleware = require('./middleware/auth');
+const socketIo = require('socket.io');
+const connectDB = require('./config/db');
+const authRoutes = require('./routes/authRoutes');
+const chatRoutes = require('./routes/chatRoutes');
+const auth = require('./middleware/authMiddleware');
+const { saveMessage } = require('./controllers/chatController');
+const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server, {
-  cors: { origin: '*' }
+const io = socketIo(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
 });
 
-// Conexión a MongoDB
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+// Conectar a la base de datos
+connectDB();
 
+// Middleware
 app.use(express.json());
-app.use('/api/auth', authRoutes);
+app.use(cors());
 
-// Socket.IO - Gestión de mensajes
+// Rutas de la API
+app.use('/api/auth', authRoutes);
+app.use('/api/chat', chatRoutes);
+
+// Manejar conexión de Socket.IO
 io.on('connection', (socket) => {
-  socket.on('chatMessage', async ({ user, message }) => {
-    const newMessage = new Message({ user, message });
-    await newMessage.save();
-    io.emit('message', newMessage);
+  console.log('New client connected');
+
+  socket.on('chatMessage', (msg) => {
+    saveMessage(msg.user, msg.message);
+    io.emit('message', msg);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
   });
 });
 
+// Iniciar servidor
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
