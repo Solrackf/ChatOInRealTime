@@ -1,6 +1,6 @@
 # Chat En Tiempo Real 
 
-Hola! Este repositorio aloja el código de frontend y backend para la prueba técnica para la vacante de desarrollador Full Stack **Javascript**. Esta prueba técnica tiene como objetivo la creación de un chat en tiempo real que se visualiza mientras los estudiantes tienen la clase en vivo.
+Hola! Este repositorio aloja el código de frontend y backend para la creación de un chat en tiempo real que se visualiza mientras los estudiantes tienen la clase en vivo.
 ![Imagen test del chat en tiempo real](/ReadmeImages/Initial%20Image.png)
 # Para poder Iniciar el Proyecto
 Desde la consola se debe acceder a la carpeta **server** para poder acceder al servidor. Para poder iniciarlo debería iniciar el proyecto escribiendo el comando: **npm run start**
